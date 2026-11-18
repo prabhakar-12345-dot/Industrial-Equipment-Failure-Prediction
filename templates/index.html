@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Industrial Equipment Failure Prediction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin-top: 10px;
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 30px;
+        }
+
+        .form-section h2 {
+            text-align: center;
+            color: #1e293b;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #334155;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .button-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 18px;
+            text-align: center;
+            border-radius: 10px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 20px;
+            font-weight: bold;
+            border: 1px solid #86efac;
+        }
+
+        .footer {
+            text-align: center;
+            background: #f8fafc;
+            padding: 15px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>Industrial Equipment Failure Prediction</h1>
+            <p>Machine Learning Based Predictive Maintenance System</p>
+        </div>
+
+        <div class="form-section">
+
+            <h2>Enter Machine Details</h2>
+
+            <form action="/predict" method="post">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Air Temperature [K]</label>
+                        <input
+                            type="number"
+                            step="any"
+                            name="air_temperature"
+                            placeholder="Example: 298.1"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Process Temperature [K]</label>
+                        <input
+                            type="number"
+                            step="any"
+                            name="process_temperature"
+                            placeholder="Example: 308.6"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Rotational Speed [rpm]</label>
+                        <input
+                            type="number"
+                            step="any"
+                            name="rotational_speed"
+                            placeholder="Example: 1551"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Torque [Nm]</label>
+                        <input
+                            type="number"
+                            step="any"
+                            name="torque"
+                            placeholder="Example: 42.8"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tool Wear [min]</label>
+                        <input
+                            type="number"
+                            step="any"
+                            name="tool_wear"
+                            placeholder="Example: 0"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Machine Type</label>
+                        <select name="machine_type" required>
+                            <option value="">Select Machine Type</option>
+                            <option value="L">L - Low</option>
+                            <option value="M">M - Medium</option>
+                            <option value="H">H - High</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="button-section">
+                    <button type="submit">
+                        Predict Machine Failure
+                    </button>
+                </div>
+
+            </form>
+
+            {% if prediction_text %}
+                <div class="result">
+                    Prediction Result: {{ prediction_text }}
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div class="footer">
+            Developed using Python, FastAPI, Pandas and Machine Learning
+        </div>
+
+    </div>
+
+</body>
+</html>
